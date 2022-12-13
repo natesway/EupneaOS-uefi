@@ -1,4 +1,4 @@
-name: Building + releasing depthcharge image
+name: Building + releasing image
 on:
   push:
     branches:
@@ -10,7 +10,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-release-depthcharge:
+  build-release:
     runs-on: ubuntu-22.04
     steps:
       - name: Checking out repository code
@@ -41,10 +41,10 @@ jobs:
       - name: Downloading fedora rootfs
         run: curl -L "https://github.com/eupnea-linux/fedora-rootfs/releases/latest/download/fedora-rootfs-37.tar.xz" -o /tmp/eupneaos-build/rootfs.tar.xz
 
-      - name: Building depthcharge image
-        run: sudo python3 build_depthcharge.py
+      - name: Building image
+        run: sudo python3 build.py
 
-      - name: Uploading depthcharge rar archive as artifact
+      - name: Uploading rar archive as artifact
         uses: actions/upload-artifact@v2
         with:
           name: eupneaos-depthcharge.bin.rar
