@@ -48,10 +48,14 @@ def prepare_image() -> str:
 
     print_status("Formatting rootfs part")
     rootfs_mnt = img_mnt + "p4"  # fourth partition is rootfs
+    esp_mnt = img_mnt + "p3"
     # Create rootfs ext4 partition
     bash(f"yes 2>/dev/null | mkfs.ext4 {rootfs_mnt}")  # 2>/dev/null is to supress yes broken pipe warning
     # Mount rootfs partition
     bash(f"mount {rootfs_mnt} /mnt/eupneaos")
+    # Mount esp
+    bash("mkdir -p /mnt/eupneaos/boot")
+    bash(f"mount {esp_mnt} /mnt/eupneaos/boot")
 
     # get uuid of rootfs partition
     rootfs_partuuid = bash(f"blkid -o value -s PARTUUID {rootfs_mnt}")
