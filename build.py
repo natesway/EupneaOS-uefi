@@ -41,12 +41,13 @@ def prepare_image() -> str:
     bash(f"parted -s {img_mnt} mklabel gpt")
     bash(f"parted -s -a optimal {img_mnt} unit mib mkpart Kernel 1 65")  # kernel partition
     bash(f"parted -s -a optimal {img_mnt} unit mib mkpart Kernel 65 129")  # reserve kernel partition
-    bash(f"parted -s -a optimal {img_mnt} unit mib mkpart Root 129 100%")  # rootfs partition
+    bash(f"parted -s -a optimal {img_mnt} unit mib mkpart Root 129 629") # EFI System Partition
+    bash(f"parted -s -a optimal {img_mnt} unit mib mkpart Root 629 100%")  # rootfs partition
     bash(f"cgpt add -i 1 -t kernel -S 1 -T 5 -P 15 {img_mnt}")  # set kernel flags
     bash(f"cgpt add -i 2 -t kernel -S 1 -T 5 -P 1 {img_mnt}")  # set backup kernel flags
 
     print_status("Formatting rootfs part")
-    rootfs_mnt = img_mnt + "p3"  # third partition is rootfs
+    rootfs_mnt = img_mnt + "p4"  # fourth partition is rootfs
     # Create rootfs ext4 partition
     bash(f"yes 2>/dev/null | mkfs.ext4 {rootfs_mnt}")  # 2>/dev/null is to supress yes broken pipe warning
     # Mount rootfs partition
