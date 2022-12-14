@@ -94,7 +94,7 @@ def bootstrap_rootfs() -> None:
     chroot("dnf group install -y 'Hardware Support'")
     chroot("dnf group install -y 'Common NetworkManager Submodules'")
     chroot("dnf install -y linux-firmware")
-    chroot("dnf install -y git vboot-utils rsync cloud-utils parted")  # postinstall dependencies
+    chroot("dnf install -y git vboot-utils rsync cloud-utils parted grub2-efi-x64 efibootmgr")  # postinstall dependencies
 
     # Add RPMFusion repos
     chroot(f"dnf install -y https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-37.noarch.rpm")
@@ -183,6 +183,10 @@ def configure_rootfs() -> None:
 
     # systemd-resolved.service needed to create /etc/resolv.conf link. Not enabled by default for some reason
     chroot("systemctl enable systemd-resolved")
+
+    # Install grub
+    chroot("grub2-install --target=x86_64-efi --efi-directory=/boot --removable")
+    chroot("grub2-mkconfig -o /boot/grub/grub.cfg")
 
 
 def customize_kde() -> None:
