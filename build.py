@@ -101,7 +101,16 @@ def bootstrap_rootfs() -> None:
     chroot(f"dnf install -y https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-37.noarch.rpm")
 
 
-def configure_rootfs() -> None:
+def get_uuids(img_mnt: None) -> list:
+    bootpart = img_mnt + "p3"
+    rootpart = img_mnt + "p4"
+    bootuuid = bash(f"blkid -o value -s PARTUUID {bootpart}")
+    rootuuid = bash(f"blkid -o value -s PARTUUID {rootpart}")
+    uuids = [bootuuid, rootuuid]
+    return uuids
+
+
+def configure_rootfs(uuids) -> None:
     # Extract kernel modules
     print_status("Extracting kernel modules")
     rmdir("/mnt/eupneaos/lib/modules")  # remove all old modules
@@ -183,6 +192,12 @@ def configure_rootfs() -> None:
 
     # systemd-resolved.service needed to create /etc/resolv.conf link. Not enabled by default for some reason
     chroot("systemctl enable systemd-resolved")
+
+    # Append lines to fstab
+    with open("/mnt/eupneaos/etc/fstab", "r") as fstab:
+        oldfstab = fstab
+    with open("/mnt/eupneaos/etc/fstab"), "w") as fstab:
+        fstab = oldfstab + f"\nUUID={uuids[0]} /boot vfat rw,relatime,fmask=0022,dmask=0022,codepage=437 0 2\n{uuids[1]} / ext4 rw,relatime 0 1"
 
     # Install grub
     chroot("grub2-install --target=x86_64-efi --efi-directory=/boot --removable")
@@ -291,8 +306,9 @@ if __name__ == "__main__":
     mkdir("/mnt/eupneaos", create_parents=True)
 
     image_props = prepare_image()
+    uuids = get_uuids(image_props)
     bootstrap_rootfs()
-    configure_rootfs()
+    configure_rootfs(uuids)
     customize_kde()
     relabel_files()
 
