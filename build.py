@@ -102,7 +102,8 @@ def bootstrap_rootfs() -> None:
     # Add RPMFusion repos
     chroot(f"dnf install -y https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-37.noarch.rpm")
     chroot(f"dnf install -y https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-37.noarch.rpm")
-    chroot(f"mount proc && mount sys && mount dev")
+    bash(f"mount -t proc none /mnt/eupneaos/proc && mount -o bind /dev /mnt/eupneaos/dev")
+
 
 
 def get_uuids(img_mnt: None) -> list:
