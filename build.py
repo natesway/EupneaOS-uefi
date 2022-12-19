@@ -51,6 +51,8 @@ def prepare_image() -> str:
     esp_mnt = img_mnt + "p3"
     # Create rootfs ext4 partition
     bash(f"yes 2>/dev/null | mkfs.ext4 {rootfs_mnt}")  # 2>/dev/null is to supress yes broken pipe warning
+    # Create esp fat32 partition
+    bash(f"yes 2>/dev/null | mkfs.fat -F 32 {esp_mnt}")  # 2>/dev/null is to supress yes broken pipe warning
     # Mount rootfs partition
     bash(f"mount {rootfs_mnt} /mnt/eupneaos")
     # Mount esp
