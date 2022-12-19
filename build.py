@@ -97,6 +97,7 @@ def bootstrap_rootfs() -> None:
     chroot("dnf group install -y 'Common NetworkManager Submodules'")
     chroot("dnf install -y linux-firmware")
     chroot("dnf install -y git vboot-utils rsync cloud-utils parted grub2-efi-x64 efibootmgr")  # postinstall dependencies
+    chroot("dnf install -y grub2-efi-x64-modules")
 
     # Add RPMFusion repos
     chroot(f"dnf install -y https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-37.noarch.rpm")
