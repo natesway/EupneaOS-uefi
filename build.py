@@ -263,21 +263,21 @@ def compress_image(img_mnt: str) -> None:
     # There are 2 kernel partitions -> 67108864 bytes * 2 = 134217728 bytes
     actual_fs_in_bytes += 134217728
     actual_fs_in_bytes += 20971520  # add 20mb for linux to be able to boot properly
-    bash(f"truncate --size={actual_fs_in_bytes} ./eupneaos-depthcharge.bin")
+    bash(f"truncate --size={actual_fs_in_bytes} ./eupneaos-uefi.img")
 
     # compress image to tar. Tars are smaller but the native file manager on chromeos cant uncompress them
     # These are stored as backups in the GitHub releases
-    bash("tar -cv -I 'xz -9 -T0' -f ./eupneaos-depthcharge.bin.tar.xz ./eupneaos-depthcharge.bin")
+    bash("tar -cv -I 'xz -9 -T0' -f ./eupneaos-uefi.img.tar.xz ./eupneaos-uefi.img")
 
     # Rar archives are bigger, but natively supported by the ChromeOS file manager
     # These are uploaded as artifacts and then manually uploaded to a cloud storage
-    bash("rar a eupneaos-depthcharge.bin.rar -m5 eupneaos-depthcharge.bin")
+    bash("rar a eupneaos-uefi.img.rar -m5 eupneaos-uefi.img")
 
     print_status("Calculating sha256sums")
     # Calculate sha256sum sums
-    with open("eupneaos-depthcharge.sha256", "w") as file:
-        file.write(bash("sha256sum eupneaos-depthcharge.bin eupneaos-depthcharge.bin.tar.xz "
-                        "eupneaos-depthcharge.bin.rar"))
+    with open("eupneaos-uefi.sha256", "w") as file:
+        file.write(bash("sha256sum eupneaos-uefi.img eupneaos-uefi.img.tar.xz "
+                        "eupneaos-uefi.img.rar"))
 
 
 def chroot(command: str) -> None:
