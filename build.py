@@ -196,7 +196,7 @@ def configure_rootfs(uuids) -> None:
     # Append lines to fstab
     with open("/mnt/eupneaos/etc/fstab", "r") as fstab:
         oldfstab = fstab
-    with open("/mnt/eupneaos/etc/fstab"), "w") as fstab:
+    with open("/mnt/eupneaos/etc/fstab", "w") as fstab:
         fstab = oldfstab + f"\nUUID={uuids[0]} /boot vfat rw,relatime,fmask=0022,dmask=0022,codepage=437 0 2\n{uuids[1]} / ext4 rw,relatime 0 1"
 
     # Install grub
