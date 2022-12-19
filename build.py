@@ -201,7 +201,7 @@ def configure_rootfs(uuids) -> None:
     with open("/mnt/eupneaos/etc/fstab", "r") as fstab:
         oldfstab = fstab
     with open("/mnt/eupneaos/etc/fstab", "w") as fstab:
-        fstab = oldfstab + f"\nUUID={uuids[0]} /boot vfat rw,relatime,fmask=0022,dmask=0022,codepage=437 0 2\n{uuids[1]} / ext4 rw,relatime 0 1"
+        fstab = f"\nUUID={uuids[0]} /boot vfat rw,relatime,fmask=0022,dmask=0022,codepage=437 0 2\n{uuids[1]} / ext4 rw,relatime 0 1"
 
     # Install grub
     chroot("grub2-install --target=x86_64-efi --efi-directory=/boot --removable")
