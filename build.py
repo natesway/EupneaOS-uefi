@@ -195,6 +195,8 @@ def configure_rootfs(uuids) -> None:
     # systemd-resolved.service needed to create /etc/resolv.conf link. Not enabled by default for some reason
     chroot("systemctl enable systemd-resolved")
 
+    # Fix fstab issue?
+    bash("touch /mnt/eupneaos/etc/fstab")
     # Append lines to fstab
     with open("/mnt/eupneaos/etc/fstab", "r") as fstab:
         oldfstab = fstab
