@@ -24,11 +24,11 @@ def prepare_image() -> str:
     print_status("Preparing image")
 
     try:
-        bash(f"fallocate -l 10G eupneaos-depthcharge.bin")
+        bash(f"fallocate -l 10G eupneaos-uefi.img")
     except subprocess.CalledProcessError:  # try fallocate, if it fails use dd
-        bash(f"dd if=/dev/zero of=eupneaos-depthcharge.bin status=progress bs=1024 count={10 * 1000000}")
+        bash(f"dd if=/dev/zero of=eupneaos-uefi.img status=progress bs=1024 count={10 * 1000000}")
     print_status("Mounting empty image")
-    img_mnt = bash("losetup -f --show eupneaos-depthcharge.bin")
+    img_mnt = bash("losetup -f --show eupneaos-uefi.img")
     if img_mnt == "":
         print_error("Failed to mount image")
         exit(1)
