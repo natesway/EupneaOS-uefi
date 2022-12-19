@@ -207,10 +207,10 @@ def configure_rootfs(uuids) -> None:
         fstab = f"\nUUID={uuids[0]} /boot vfat rw,relatime,fmask=0022,dmask=0022,codepage=437 0 2\n{uuids[1]} / ext4 rw,relatime 0 1"
 
     # Install grub
-    chroot("grub2-mkconfig -o /boot/grub/grub.cfg")
-    chroot("grub2-mkconfig -o /boot/grub2/grub.cfg")
+    chroot("grub2-mkconfig > /boot/grub/grub.cfg")
+    chroot("grub2-mkconfig > /boot/grub2/grub.cfg")
     chroot("grub2-install --target=x86_64-efi --efi-directory=/boot --removable")
-    chroot("grub2-mkconfig -o /boot/grub/grub.cfg")
+    chroot("grub2-mkconfig > /boot/grub/grub.cfg")
 
 
 def customize_kde() -> None:
