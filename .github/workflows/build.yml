@@ -47,11 +47,11 @@ jobs:
       - name: Uploading rar archive as artifact
         uses: actions/upload-artifact@v2
         with:
-          name: eupneaos-depthcharge.bin.rar
-          path: ./eupneaos-depthcharge.bin.rar
+          name: eupneaos-uefi.img.rar
+          path: ./eupneaos-uefi.img.rar
 
       - name: Splitting tar archive
-        run: split --verbose -b 1900MB eupneaos-depthcharge.bin.tar.xz eupneaos-depthcharge.split.
+        run: split --verbose -b 1900MB eupneaos-uefi.img.tar.xz eupneaos-uefi.split.
 
       - name: Generating release message
         id: tag
@@ -75,12 +75,12 @@ jobs:
             This is a development build of EupneaOS. Highly unstable!
             
             1. Download all release files
-            2. Combine files into tar: ``cat eupneaos-depthcharge.split.?? > eupneaos-depthcharge.bin.tar.xz``
+            2. Combine files into tar: ``cat eupneaos-uefi.split.?? > eupneaos-uefi.img.tar.xz``
             3. Extract eupneaos-depthcharge.bin.tar.xz
-            4. Verify checksum of the image: ``sha256sum -c --ignore-missing eupneaos-depthcharge.sha256``
-            5. Flash eupneaos-depthcharge.bin to usb/sd-card
+            4. Verify checksum of the image: ``sha256sum -c --ignore-missing eupneaos-uefi.sha256``
+            5. Flash eupneaos-uefi.img to usb/sd-card
             
             Triggered by ${{ github.sha }} at ${{ github.event.repository.updated_at }}
           files: |
-            eupneaos-depthcharge.split.*
-            eupneaos-depthcharge.sha256
+            eupneaos-uefi.split.*
+            eupneaos-uefi.sha256
